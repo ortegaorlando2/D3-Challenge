@@ -23,14 +23,34 @@ let svg = d3.select(".chart")
 let chartGroup = svg.append("g")
   .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
+
+  // +data.id;
+  // +data.state;
+  // +data.abbr;
+  // +data.poverty;
+  // +data.povertyMoe;
+  // +data.age; //will be assigned to dxArray
+  // +data.ageMoe;
+  // +data.income;
+  // +data.incomeMoe;
+  // +data.healthcare;
+  // +data.healthcareLow;
+  // +data.healthcareHigh;
+  // +data.obesity;
+  // +data.obesityLow;
+  // +data.obesityHigh;
+  // +data.smokes; //will be assigned to dyArray
+  // +data.smokesLow;
+  // +data.smokesHigh;
+
 // Load Data from csv
 d3.csv("MyData.csv").then(function(Mydata) {
 
 // Step 1: Assign variables
  
     Mydata.forEach(function(data) {
-      data.dxArray = +data.x;
-      data.dyArray = +data.y;
+      data.dxArray = +data.age;
+      data.dyArray = +data.smokes;
     });
 
     // console.log(`This is my x coordinate ${data.dxArray}`)
@@ -39,12 +59,12 @@ d3.csv("MyData.csv").then(function(Mydata) {
     // Create scale function with scaleLinear
     // the graph that we are planning is a scatter plot
     let scaleX = d3.scaleLinear()
-      .domain([0, d3.max(Mydata, d => d.dxArray)])
+      .domain([30, d3.max(Mydata, d => d.dxArray)])
       .range([0, width]);
       //.padding(0.1);
 
     let scaleY = d3.scaleLinear()
-      .domain([0, d3.max(Mydata, d => d.dyArray)])
+      .domain([8, d3.max(Mydata, d => d.dyArray)])
       .range([height, 0]);
 
     //-Create axes 
@@ -97,12 +117,12 @@ d3.csv("MyData.csv").then(function(Mydata) {
       .attr("x", 0 - (height / 2))
       .attr("dy", "1em")
       .attr("class", "axisText")
-      .text("Coordinate y");
+      .text("Smokers *10000");
 
     chartGroup.append("text")
       .attr("transform", `translate(${width / 2}, ${height + margin.top + 30})`)
       .attr("class", "axisText")
-      .text("Coordinate x");
+      .text("Age");
   }).catch(function(error) {
     console.log(error);
   });
