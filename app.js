@@ -51,7 +51,11 @@ d3.csv("MyData.csv").then(function(Mydata) {
     Mydata.forEach(function(data) {
       data.dxArray = +data.age;
       data.dyArray = +data.smokes;
+      data.StArray = +data.abbr;
+      //onsole.log(StArray)
     });
+
+    
 
     // console.log(`This is my x coordinate ${data.dxArray}`)
     // console.log(`This is my y coordinate ${data.dyArray}`)
@@ -66,6 +70,7 @@ d3.csv("MyData.csv").then(function(Mydata) {
     let scaleY = d3.scaleLinear()
       .domain([8, d3.max(Mydata, d => d.dyArray)])
       .range([height, 0]);
+
 
     //-Create axes 
     let bottomAxis = d3.axisBottom(scaleX);
@@ -87,11 +92,80 @@ d3.csv("MyData.csv").then(function(Mydata) {
     .data(Mydata)
     .enter()
     .append("circle")
+    // .attr("class", "dot")
     .attr("cx", d => scaleX(d.dxArray))
     .attr("cy", d => scaleY(d.dyArray))
     .attr("r", "15")
-    .attr("fill", "green")
-    .attr("opacity", ".8");
+    .attr("fill", "#89bdd3")
+    .attr("stroke", "#e3e3e3")
+    .attr("opacity", ".8")
+    
+    let textGroup = svg.append("g")
+    .attr("transform", `translate(${margin.left}, ${margin.top+5})`);
+
+    // textGroup.append("g")
+    //   .attr("transform", `translate(0, ${height})`)
+
+    let textInside = textGroup.selectAll("text")
+    .data(Mydata)
+    .enter()
+    .append("text")
+    .attr("x", d => scaleX(d.dxArray))
+    .attr("y", d => scaleY(d.dyArray))
+    .text(d => d.abbr)
+    .style("font-family", "sans-serif")
+    .style("fill", "#fff")
+    .style("text-anchor", "middle")
+
+    // .attr("style",".stateText")
+    // .attr("name", d => d.abbr)
+
+    
+
+    // circlesGroup = selectAll("circle")
+    // .attr("transform", `translate(0, ${height})`)
+    // .data(Mydata)
+    // .enter()
+    // .append("text")
+    // .attr("class", "text")
+    // .selectAll("text")
+    // .attr("cx", d => scaleX(d.dxArray))
+    // .attr("cy", d => scaleY(d.dyArray))
+    // .text(d => d.abbr)
+
+    // circlesGroup.selectAll("text")
+    // .data(MyData)
+    // .emter()
+    // .append("text")
+    // .attr("cx", d => scaleX(d.dxArray))
+    // .attr("cy", d => scaleY(d.dyArray))
+    // .text(d=>d)
+    
+    // let node = svg.selectAll("g")    
+    // .data(Mydata)
+    // .enter()
+    // .append("text")
+    // .attr("class", "dodo")
+    // .text(function(d) { return d.abbr;})
+    // .attr("transform", `translate(${margin.left}, ${margin.top})`)
+    // .attr("cx", d => scaleX(d.dxArray) )
+    // .attr("cy", d => scaleY(d.dyArray))
+
+
+  // node.append("circle")
+  // .attr("class", "dot")
+  // .attr("cx", d => scaleX(d.dxArray))
+  // .attr("cy", d => scaleY(d.dyArray))
+  // .attr("r", 12);
+
+  // node.append("text")
+  // .attr("cx", d => scaleX(d.dxArray) )
+  // .attr("cy", d => scaleY(d.dyArray))
+  // .text(d=> d.abbr)
+
+
+
+    
 
     // Create a tooltip object inside the html. add a div tag 
     //the div will have a handle class called tooltip
