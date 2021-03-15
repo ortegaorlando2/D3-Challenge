@@ -43,6 +43,102 @@ let chartGroup = svg.append("g")
   // +data.smokesLow;
   // +data.smokesHigh;
 
+
+//UPDATES ARE PRACTICALLY TAKEN FROM ACTIVITY TWELVE!
+
+let chosenXAxis = "smokes"
+
+// function used for updating x-scale var upon click on axis label
+function scaleX(Mydata, chosenXAxis) {
+  // create scales
+  let xLinearScale = d3.scaleLinear()
+    .domain([d3.min(Mydata, d => d[chosenXAxis]) * 0.8,
+      d3.max(Mydata, d => d[chosenXAxis]) * 1.2
+    ])
+    .range([0, width]);
+
+  return xLinearScale;
+
+}
+
+// function used for updating xAxis var upon click on axis label
+function renderAxes(newXScale, xAxis) {
+  let bottomAxis = d3.axisBottom(newXScale);
+
+  xAxis.transition()
+    .duration(1000)
+    .call(bottomAxis);
+
+  return xAxis;
+}
+
+// function used for updating circles group with a transition to
+// new circles
+function renderCircles(circlesGroup, newXScale, chosenXAxis) {
+
+  circlesGroup.transition()
+    .duration(1000)
+    .attr("cx", d => newXScale(d[chosenXAxis]));
+
+  return circlesGroup;
+}
+
+// function used for updating circles group with new tooltip
+function updateToolTip(chosenXAxis, circlesGroup) {
+let label;
+  {
+    switch(label) {
+      case "poverty":
+        label = "poverty";
+        break;
+      case "income":
+        label = "income";
+        break;
+      case "healthcare":
+        label = "healthcare";
+        break;
+      case "obesity":
+        label = "obesity";
+        break;
+
+      default:
+        label = "age";
+    }
+  }
+  
+// id,state,abbr,poverty,povertyMoe,age,ageMoe,income,incomeMoe,healthcare,healthcareLow,healthcareHigh,obesity,obesityLow,obesityHigh,smokes,smokesLow,smokesHigh
+  
+  
+  let label;
+
+  if (chosenXAxis === "smokes") {
+    label = "Smokers:";
+  }
+  else {
+    label = "Income";
+  }
+
+  let toolTip = d3.select('body').append('div').classed('tooltip', true);
+
+  circlesGroup.on("mouseover", function(event, d) {
+    //toolTip.show(data);
+    toolTip.style('display', 'block')
+          .html(`${d.state}<br>${label} ${d[chosenXAxis]}`)
+          .style('left', event.pageX+'px')
+          .style('top', event.pageY+'px');
+
+  })
+
+  .on("mouseout", function(data, index) {
+    //toolTip.hide(data);
+    toolTip.style('display', 'none');
+  });
+
+return circlesGroup;
+}
+
+
+
 // Load Data from csv
 d3.csv("MyData.csv").then(function(Mydata) {
 
