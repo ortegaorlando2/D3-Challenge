@@ -206,10 +206,11 @@ d3.csv("MyData.csv").then(function(Mydata, err) {
    .on("click", function() {
      // get value of selection
      let value = d3.select(this).attr("value");
-     if (value !== chosenXAxis) {
+     if (value !== chosenXAxis) {  value
  
+        chosenXAxis = "income"
         // replaces chosenXAxis with value
-        chosenXAxis = "income";
+        chosenXAxis = value;
         d3.selectAll("#textCircles").remove();
         textGroup = svg.append('g')
         .attr("transform", `translate(${margin.left}, ${margin.top+5})`)
